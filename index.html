@@ -1,25 +1,98 @@
 <!doctype html>
-<html>
-
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>CS208 - Starter Code (UPDATE ME)!</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
+   <meta charset="UTF-8">
+   <title>To-Do List</title>
+   <style>
+      body {
+         font-family: Arial, sans-serif;
+      }
+
+      .done-btn {
+         margin-left: 10px;
+         cursor: pointer;
+      }
+   </style>
 </head>
 
-<body>
-  <h1>HTML Rocks!!</h1>
-  <ul>
-  <li><a href="/hello">Click here to say hello</a></li>
-  <li><button id="hello-link">Click Me!</button></li>
-  <li><button id="joke-button">Dad Joke!</button></li>
-  <script src="script.js"></script>
-  </ul>
-  <img src="funny.png" alt="Funny Image" width="300" height="200">
+<body onload="domLoaded()">
 
-  <h2 id="joke-display"></h2>
+   <h1>To-Do List</h1>
+
+   <label>
+      New task:
+      <input type="text" id="taskInput">
+   </label>
+
+   <button id="addBtn">Add</button>
+
+   <ol>
+      <li><span class="task-text">Clean bathroom</span><button class="done-btn">&#10006;</button></li>
+      <li><span class="task-text">Study for big exam</span><button class="done-btn">&#10006;</button></li>
+      <li><span class="task-text">Feed fish</span><button class="done-btn">&#10006;</button></li>
+   </ol>
+
+   <script>
+      function domLoaded() {
+         const addBtn = document.getElementById("addBtn");
+         const textbox = document.getElementById("taskInput");
+
+         // Task 2: Register click handler
+         addBtn.addEventListener("click", addBtnClick);
+
+         // Task 3: Enter key support
+         textbox.addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+               addBtnClick();
+            }
+         });
+
+         // Make existing buttons removable (for initial list)
+         const buttons = document.querySelectorAll(".done-btn");
+         buttons.forEach(btn => btn.addEventListener("click", removeTask));
+      }
+
+      function addBtnClick() {
+         const textbox = document.getElementById("taskInput");
+         const taskText = textbox.value.trim();
+
+         // Task 4: Prevent empty tasks
+         if (taskText === "") {
+            return;
+         }
+
+         addTask(taskText);
+
+         // Task 3 improvements
+         textbox.value = "";
+         textbox.focus();
+      }
+
+      function addTask(task) {
+         // Create <li>
+         const li = document.createElement("li");
+
+         li.innerHTML = `<span class="task-text">${task}</span><button class="done-btn">&#10006;</button>`;
+
+         // Find <ol>
+         const list = document.querySelector("ol");
+
+         // Append
+         list.appendChild(li);
+
+         // Task 5: Attach remove handler to the NEW button
+         const buttons = document.querySelectorAll(".done-btn");
+         const lastBtn = buttons[buttons.length - 1];
+         lastBtn.addEventListener("click", removeTask);
+      }
+
+      function removeTask(event) {
+         const li = event.target.parentNode; // <li>
+         const ol = li.parentNode;           // <ol>
+
+         ol.removeChild(li);
+      }
+   </script>
+
 </body>
-
 </html>
